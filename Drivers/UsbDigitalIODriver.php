@@ -14,7 +14,12 @@ class UsbDigitalIODriver extends DigitalIODriver
         protected readonly MPSSEContext $context,
     ) {}
 
-    public function write(int $pin, bool $state): bool
+    /**
+     * @param int $pin
+     * @param bool $state
+     * @return bool
+     */
+    public function write($pin, bool $state): bool
     {
         $state
             ? mpsse_pin_high($this->context, $pin)
@@ -23,14 +28,25 @@ class UsbDigitalIODriver extends DigitalIODriver
         return $this->read($pin);
     }
 
-    public function read(int $pin): bool
+    /**
+     * @param int $pin
+     * @return bool
+     */
+    public function read($pin): bool
     {
         $value = mpsse_pin_state($this->context, $pin, mpsse_read_pins($this->context)) == 1;
 
         return $this->line_values[$pin] = $value;
     }
 
-    public function listen(int $timeout, bool $rising_events, bool $falling_events, int $pin): ?DigitalEdgeEvent
+    /**
+     * @param int $timeout
+     * @param bool $rising_events
+     * @param bool $falling_events
+     * @param int $pin
+     * @return DigitalEdgeEvent|null
+     */
+    public function listen(int $timeout, bool $rising_events, bool $falling_events, $pin): ?DigitalEdgeEvent
     {
         if ($timeout < 0) {
             return null;

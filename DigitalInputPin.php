@@ -7,7 +7,7 @@ use GeneralPurposeIO\Contracts\Digital\DigitalIODriver;
 class DigitalInputPin
 {
     public function __construct(
-        public readonly int $pin,
+        public $pin,
         protected DigitalIODriver $driver,
     ) {}
 

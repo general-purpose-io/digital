@@ -7,7 +7,7 @@ use GeneralPurposeIO\Contracts\Digital\DigitalIODriver;
 class DigitalOutputPin
 {
     public function __construct(
-        public readonly int $pin,
+        public $pin,
         protected DigitalIODriver $driver,
     ) {}
 
@@ -45,6 +45,7 @@ class DigitalOutputPin
 
     public function close(): void
     {
+        posix_close($this->pin->fd);
         $this->driver->close();
     }
 }
