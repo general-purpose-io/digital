@@ -45,7 +45,10 @@ class DigitalOutputPin
 
     public function close(): void
     {
-        posix_close($this->pin->fd);
+        if (is_object($this->pin) && isset($this->pin->fd) && is_int($this->pin->fd)) {
+            posix_close($this->pin->fd);
+        }
+
         $this->driver->close();
     }
 }
