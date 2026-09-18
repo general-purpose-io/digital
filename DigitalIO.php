@@ -2,22 +2,16 @@
 
 namespace GeneralPurposeIO\Digital;
 
-use Fabricate\MagicAliases\MagicAlias;
-use GeneralPurposeIO\Contracts\Digital\DigitalIOCommunicationAdapter as CommunicationAdapter;
+use Voyager\MagicAliases\MagicAlias;
 
 /**
  * @method static void extend(string $name, callable $callback)
- * @method static CommunicationAdapter adapter(string $name)
+ * @method static DigitalIOConnectionDriver driver(?string $name = null)
  */
 class DigitalIO extends MagicAlias
 {
-    /**
-     * Get the registered name of the component.
-     *
-     * @return string
-     */
     protected static function getMagicAliasAccessor(): string
     {
-        return 'gpio.digital-io';
+        return 'gpio.digital';
     }
 }

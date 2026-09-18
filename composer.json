@@ -1,20 +1,18 @@
 {
     "name": "gpio/digital",
-    "description": "The GeneralPurposeIO Digital package.",
+    "description": "GeneralPurposeIO digital IO: the gpio.digital connection manager, driver, factory and pin transports.",
     "type": "library",
-    "version": "0.7.0",
     "keywords": [
-        "framework",
         "scrapyard-io",
         "gpio",
         "digital-io"
     ],
     "license": "MIT",
-    "homepage": "https://scrapyard-io.projectsaturnstudios.com/ecosystem/scrapyard-io/gpio-framework/0.6.x/overview",
+    "homepage": "https://scrapyard-io.projectsaturnstudios.com/ecosystem/scrapyard-io/framework/0.8.x/overview",
     "support": {
-        "docs": "https://scrapyard-io.projectsaturnstudios.com/ecosystem/scrapyard-io/gpio-framework/0.6.x/overview",
-        "source": "https://github.com/scrapyard-io/gpio-framework",
-        "issues": "https://github.com/scrapyard-io/gpio-framework/issues"
+        "docs": "https://scrapyard-io.projectsaturnstudios.com/ecosystem/scrapyard-io/framework/0.8.x/overview",
+        "source": "https://github.com/scrapyard-io/framework",
+        "issues": "https://github.com/scrapyard-io/framework/issues"
     },
     "authors": [
         {
@@ -24,28 +22,36 @@
     ],
     "require": {
         "php": "^8.4|^8.5|^8.6",
-        "gpio/common": "0.7.0",
-        "gpio/contracts": "0.7.0"
+        "gpio/contracts": "^0.8.0",
+        "venusian-voyager/collections": "^0.8.0",
+        "venusian-voyager/contracts": "^0.8.0",
+        "venusian-voyager/magic-aliases": "^0.8.0",
+        "venusian-voyager/nuts-and-bolts": "^0.8.0"
     },
     "suggest": {
-        "microscrap/gpio": "POSIX Digital IO bindings for the PosixDigitalIOAdapter (^0.7)",
-        "microscrap/mpsse": "MPSSE USB Digital IO for the MpsseDigitalIOAdapter (^0.7)",
-        "scrapyard-io/gpio-framework": "Kitchen-sink metapackage that replaces gpio/digital at the same version (^0.7)"
+        "microscrap/scrapyard-linux": "^0.8.0 - native libgpiod pins",
+        "microscrap/scrapyard-usb": "^0.8.0 - MPSSE pins over FTDI"
     },
     "autoload": {
         "psr-4": {
             "GeneralPurposeIO\\Digital\\": ""
         }
     },
-    "config": {
-        "sort-packages": true
-    },
     "extra": {
         "branch-alias": {
-            "dev-master": "0.7.x-dev",
-            "dev-main": "0.7.x-dev",
-            "dev-0.7.x": "0.7.x-dev"
+            "dev-main": "0.8.x-dev"
+        },
+        "venusian": {
+            "providers": [
+                "GeneralPurposeIO\\Digital\\DigitalIOServiceProvider"
+            ],
+            "aliases": {
+                "DigitalIO": "GeneralPurposeIO\\Digital\\DigitalIO"
+            }
         }
+    },
+    "config": {
+        "sort-packages": true
     },
     "minimum-stability": "dev",
     "prefer-stable": true
