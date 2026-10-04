@@ -10,7 +10,7 @@ use GeneralPurposeIO\Contracts\Digital\SignalEdge;
 use GeneralPurposeIO\NutsAndBolts\CarrierTransport;
 use GeneralPurposeIO\Contracts\Digital\DigitalInTransport as TransportContract;
 use Voyager\Contracts\IOPools\Loop as LoopInterface;
-use Voyager\Contracts\IOPools\LoopTimer;
+use Voyager\Contracts\IOPools\LoopResources\Timer;
 
 /**
  * Every edge the hardware reports lands in one queue of unread edges, whoever asked for it.
@@ -32,7 +32,7 @@ abstract class DigitalInputTransport extends CarrierTransport implements Transpo
     private ?EdgeWatch $watch = null;
     private ?Closure $loop_resolver = null;
     private ?LoopInterface $registered_on = null;
-    private ?LoopTimer $sampler = null;
+    private ?Timer $sampler = null;
     private bool $watching = false;
     private bool $mail_rising = true;
     private bool $mail_falling = true;
@@ -186,6 +186,7 @@ abstract class DigitalInputTransport extends CarrierTransport implements Transpo
             }
 
             $this->sampler?->cancel();
+            $this->registered_on->forget($this->samplerName());
             $this->registered_on->forget($this->name());
             [$this->registered_on, $this->sampler] = [null, null];
 
@@ -198,13 +199,21 @@ abstract class DigitalInputTransport extends CarrierTransport implements Transpo
         }
 
         $interval = $this->samplingInterval();
+        $interval_ns = is_null($interval) ? null : (int) round($interval * 1e9);
 
-        if ($this->sampler?->interval() !== $interval) {
+        if ($this->sampler?->interval() !== $interval_ns) {
             $this->sampler?->cancel();
+            $this->registered_on->forget($this->samplerName());
             $this->sampler = is_null($interval)
                 ? null
-                : $this->registered_on->every($interval, fn () => $this->collect(), $this->name());
+                : $this->registered_on->every($interval, fn () => $this->collect(), $this->samplerName());
         }
+    }
+
+    /** The sampler's own loop name: a timer filed under the pin's name would replace its watch. */
+    private function samplerName(): string
+    {
+        return $this->name().'.sampler';
     }
 
     private function listenBlocking(int $timeout, bool $rising, bool $falling): ?DigitalEdgeEvent

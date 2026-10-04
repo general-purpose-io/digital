@@ -22,14 +22,16 @@
     ],
     "require": {
         "php": "^8.4|^8.5|^8.6",
-        "gpio/contracts": "^0.9.0",
-        "venusian-voyager/collections": "^0.9.0",
-        "venusian-voyager/contracts": "^0.9.0",
-        "venusian-voyager/nuts-and-bolts": "^0.9.0"
+        "gpio/contracts": "^0.10.0",
+        "gpio/nuts-and-bolts": "^0.10.0",
+        "venusian-voyager/collections": "^0.10.0",
+        "venusian-voyager/contracts": "^0.10.0",
+        "venusian-voyager/io-pools": "^0.10.0",
+        "venusian-voyager/nuts-and-bolts": "^0.10.0"
     },
     "suggest": {
-        "microscrap/scrapyard-linux": "^0.9.0 - native libgpiod pins",
-        "microscrap/scrapyard-usb": "^0.9.0 - MPSSE pins over FTDI"
+        "microscrap/scrapyard-linux": "^0.10.0 - native libgpiod pins",
+        "microscrap/scrapyard-usb": "^0.10.0 - MPSSE pins over FTDI"
     },
     "autoload": {
         "psr-4": {
@@ -43,10 +45,7 @@
         "venusian": {
             "providers": [
                 "GeneralPurposeIO\\Digital\\DigitalIOServiceProvider"
-            ],
-            "aliases": {
-                "DigitalIO": "GeneralPurposeIO\\Digital\\DigitalIO"
-            }
+            ]
         }
     },
     "config": {

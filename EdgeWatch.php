@@ -4,10 +4,12 @@ namespace GeneralPurposeIO\Digital;
 
 use Closure;
 use Voyager\Contracts\IOPools\Pumpable;
-use Voyager\Contracts\IOPools\StreamWatchable;
+use Voyager\IOPools\Resources\WakeSource;
+use Voyager\IOPools\Waiter\Wakes\Readable;
 use GeneralPurposeIO\Contracts\Digital\DigitalEdgeEvent;
 
-class EdgeWatch implements StreamWatchable, Pumpable
+/** What a watched pin registers on the loop: a readable wake per edge stream, a collect when one fires, and the edges it mails. */
+class EdgeWatch extends WakeSource implements Pumpable
 {
     /** @var list<DigitalEdgeEvent> */
     private array $mail = [];
@@ -17,21 +19,21 @@ class EdgeWatch implements StreamWatchable, Pumpable
         private readonly Closure $collect,
     ) {}
 
+    public function wakes(): array
+    {
+        return array_map(fn (mixed $stream): Readable => new Readable($stream), ($this->streams)());
+    }
+
+    public function woke(array $fired): void
+    {
+        ($this->collect)();
+    }
+
     public function pump(): array
     {
         [$mail, $this->mail] = [$this->mail, []];
 
         return $mail;
-    }
-
-    public function streams(): array
-    {
-        return ($this->streams)();
-    }
-
-    public function tick(): void
-    {
-        ($this->collect)();
     }
 
     public function post(DigitalEdgeEvent $edge): void
